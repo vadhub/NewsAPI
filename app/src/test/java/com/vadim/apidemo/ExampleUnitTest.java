@@ -1,4 +1,4 @@
-package com.vadim.newsapi;
+package com.vadim.apidemo;
 
 import org.junit.Test;
 
