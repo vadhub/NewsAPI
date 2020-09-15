@@ -1,15 +1,20 @@
 package com.vadim.apidemo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -20,21 +25,43 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn;
-    private TextView textView;
+    private RecyclerView recyclerView;
+    private Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private  List<Article> articles = new ArrayList<>();
 
-    private final String URL = "http://newsapi.org/v2/";
+    private final String URL = "http://newsapi.org/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn = (Button) findViewById(R.id.button2);
-        textView = (TextView) findViewById(R.id.textView);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setNestedScrollingEnabled(false);
 
-        btn.setOnClickListener(v -> getPosts());
+        getPosts();
 
+
+    }
+
+    private void initListener(){
+        adapter.setOnItemClickListenerNews(new Adapter.OnItemClickListenerNews() {
+            @Override
+            public void onClickItem(View view, int position) {
+                Intent intent = new Intent(MainActivity.this, PostDescription.class);
+                Article article = articles.get(position);
+                intent.putExtra("url", article.getUrl());
+                intent.putExtra("urtImg", article.getUrlToImage());
+                intent.putExtra("title", article.getTitle());
+                intent.putExtra("content", article.getContent());
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void getPosts(){
@@ -47,27 +74,30 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {
-                if(!response.isSuccessful()){
-                    textView.setText("responseCode"+response.code());
+                if(response.isSuccessful()&&response.body().getArticles()!=null){
+
+                    if(!articles.isEmpty()){
+                        articles.clear();
+                    }
+                    adapter = new Adapter();
+                    articles = response.body().getArticles();
+                    adapter.setArticles(articles);
+                    recyclerView.setAdapter(adapter);
+
+                    initListener();
+
+                }else {
+                    Toast.makeText(MainActivity.this,"Request code"+response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
 
-                List<Article> articles = response.body().getArticles();
-                for(Article article : articles){
-                    String content = "";
-                    content += "title:" + article.getTitle()+"\n";
-                    content += "description:" + article.getDescription()+"\n";
-                    content += "urlToImage:" + article.getUrlToImage()+"\n";
 
-                    textView.append(content);
-
-                }
             }
 
             @Override
             public void onFailure(Call<News> call, Throwable t) {
-                textView.setText(t.getMessage());
+                Toast.makeText(MainActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
