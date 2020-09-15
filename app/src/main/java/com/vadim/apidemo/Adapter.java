@@ -16,7 +16,6 @@ import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     private List<Article> articles;
-    private Context context;
 
     private OnItemClickListenerNews onItemClickListenerNews;
 
@@ -58,7 +57,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         void onClickItem(View view, int position);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView imageView;
         private TextView title;
@@ -71,11 +70,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView) itemView.findViewById(R.id.description);
             this.onItemClickListenerNews = onItemClickListenerNews;
+
+            itemView.setOnClickListener(v -> {
+                if(onItemClickListenerNews!=null)
+                    onItemClickListenerNews.onClickItem(v,getAdapterPosition());
+            });
         }
 
-        @Override
-        public void onClick(View v) {
-            onItemClickListenerNews.onClickItem(v,getAdapterPosition());
-        }
     }
 }

@@ -1,6 +1,6 @@
 package com.vadim.apidemo;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,7 +22,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
     private RecyclerView recyclerView;
     private Adapter adapter;
@@ -48,24 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initListener(){
-        adapter.setOnItemClickListenerNews(new Adapter.OnItemClickListenerNews() {
-            @Override
-            public void onClickItem(View view, int position) {
-                Intent intent = new Intent(MainActivity.this, PostDescription.class);
-                Article article = articles.get(position);
-                intent.putExtra("url", article.getUrl());
-                intent.putExtra("urtImg", article.getUrlToImage());
-                intent.putExtra("title", article.getTitle());
-                intent.putExtra("content", article.getContent());
-
-                startActivity(intent);
-            }
-        });
-    }
-
     private void getPosts(){
-        Gson gson = new GsonBuilder().create();
+
         Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(URL).build();
 
         JsonPlaceHolderAPI inter = retrofit.create(JsonPlaceHolderAPI.class);
@@ -91,14 +74,27 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-
-
             }
 
             @Override
             public void onFailure(Call<News> call, Throwable t) {
                 Toast.makeText(MainActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        });
+    }
+
+    private void initListener(){
+        adapter.setOnItemClickListenerNews((view, position) -> {
+            Intent intent = new Intent(MainActivity.this, PostDescription.class);
+            Article article = articles.get(position);
+            intent.putExtra("url", article.getUrl());
+            intent.putExtra("urtImg", article.getUrlToImage());
+            intent.putExtra("title", article.getTitle());
+            intent.putExtra("content", article.getContent());
+
+            startActivity(intent);
+
+           // Toast.makeText(MainActivity.this, position, Toast.LENGTH_SHORT).show();
         });
     }
 }

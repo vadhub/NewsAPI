@@ -5,16 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.vadim.apidemo.PostDescription">
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"></include>
+
 
     <ImageView
         android:id="@+id/imgPost"
-        android:layout_width="404dp"
-        android:layout_height="253dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="38dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@android:drawable/ic_dialog_info" />
 
     <TextView
@@ -23,9 +26,8 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textColor="#6915FF"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgPost" />
 
@@ -42,16 +44,18 @@
         <TextView
             android:id="@+id/title_post"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:textColor="#000000"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="388dp"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
