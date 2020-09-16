@@ -43,8 +43,6 @@ public class MainActivity extends FragmentActivity {
         recyclerView.setNestedScrollingEnabled(false);
 
         getPosts();
-
-
     }
 
     private void getPosts(){
@@ -90,7 +88,7 @@ public class MainActivity extends FragmentActivity {
             intent.putExtra("url", article.getUrl());
             intent.putExtra("urtImg", article.getUrlToImage());
             intent.putExtra("title", article.getTitle());
-            intent.putExtra("content", article.getContent());
+            intent.putExtra("description", article.getDescription());
 
             startActivity(intent);
 

@@ -4,15 +4,19 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ResourceBundle;
 
 public class PostDescription extends FragmentActivity {
 
@@ -22,7 +26,6 @@ public class PostDescription extends FragmentActivity {
     private TextView reference;
     private Toolbar toolbar;
     private Button reverse;
-
 
     private String url;
     private String urlImg;
@@ -40,7 +43,7 @@ public class PostDescription extends FragmentActivity {
 
         imageView = (ImageView) findViewById(R.id.imgPost);
         title = (TextView) findViewById(R.id.title_post);
-        content = (TextView) findViewById(R.id.content);
+        content = (TextView) findViewById(R.id.content_);
         reference = (TextView) findViewById(R.id.reference);
         reverse = (Button) findViewById(R.id.btn_reverse);
 
@@ -49,9 +52,10 @@ public class PostDescription extends FragmentActivity {
         url = intent.getStringExtra("url");
         urlImg = intent.getStringExtra("urtImg");
         titleExt = intent.getStringExtra("title");
-        contentExt = intent.getStringExtra("content");
+        contentExt = intent.getStringExtra("description");
 
-        Picasso.get().load(urlImg).into(imageView);
+        Picasso.get().load(urlImg).error(R.drawable.not_found).into(imageView);
+
 
         title.setText(titleExt);
         content.setText(contentExt);

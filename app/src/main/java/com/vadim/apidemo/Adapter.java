@@ -30,7 +30,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Picasso.get().load(articles.get(position).getUrlToImage()).into(holder.imageView);
         holder.title.setText(articles.get(position).getTitle());
-        holder.description.setText(articles.get(position).getDescription());
+        holder.description.setText(articles.get(position).getContent());
 
     }
 
